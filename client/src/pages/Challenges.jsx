@@ -11,10 +11,10 @@ function Challenges() {
 
   useEffect(() => {
     if (!token) {
-      // لو مافي توكن → رجع المستخدم لصفحة تسجيل الدخول
       navigate("/login");
       return;
     }
+      // لو مافي توكن → رجع المستخدم لصفحة تسجيل الدخول
 
     const fetchChallenges = async () => {
       try {
