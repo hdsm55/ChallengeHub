@@ -14,8 +14,8 @@ function Challenges() {
       navigate("/login");
       return;
     }
-      // لو مافي توكن → رجع المستخدم لصفحة تسجيل الدخول
 
+// لو مافي توكن → رجع المستخدم لصفحة تسجيل الدخول
     const fetchChallenges = async () => {
       try {
         const response = await api.get("/challenges");

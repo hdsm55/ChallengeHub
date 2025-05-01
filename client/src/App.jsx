@@ -10,7 +10,9 @@ import Challenges from './pages/Challenges'; // ← أضف هذا الاستير
 function App() {
   const { user } = useAuth();
   console.log(user); // Log the user to use the variable and avoid the error
-
+  // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
+  // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
+  // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
   return (
     <Router>
       <Routes>
