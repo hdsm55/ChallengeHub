@@ -1,6 +1,6 @@
     const pool = require('../db');
 
-    const createChallenge = async (req, res) => {
+const createChallenge = async (req, res) => {
     const { title, description, creator_id, start_date, end_date } = req.body;
 
     try {

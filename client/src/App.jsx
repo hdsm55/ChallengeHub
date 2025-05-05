@@ -4,18 +4,21 @@ import { useAuth } from './context/AuthContext'; // استيراد السياق 
 import Login from './pages/Login'; // صفحة تسجيل الدخول
 import Register from "./pages/Register"; // ← أضف هذا الاستيراد
 import Challenges from './pages/Challenges'; // ← أضف هذا الاستيراد لاحقًا
+import AddChallenge from "./pages/AddChallenge"; // استيراد
 
-// لاحقًا نضيف Register و Challenges
+
+// لاحقًا نضيف Register و Challenges`
 
 function App() {
   const { user } = useAuth();
   console.log(user); // Log the user to use the variable and avoid the error
   // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
-  // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
-  // console.log(user); // لو حبيت تشوف بيانات المستخدم في الكونسول
+
   return (
     <Router>
       <Routes>
+        <Route path="/add" element={<AddChallenge />} />
+        {/* هنا نضيف لاحقًا صفحة إضافة تحدٍ */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} /> {/* صفحة التسجيل */}
         {/* هنا نضيف لاحقًا صفحة التحديات */}
