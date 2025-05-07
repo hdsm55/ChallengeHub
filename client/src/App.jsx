@@ -11,6 +11,7 @@ import Challenges from './pages/Challenges'; // ← أضف هذا الاستير
 import AddChallenge from './pages/AddChallenge'; // استيراد
 import ChallengeDetails from './pages/ChallengeDetails'; // استيراد تفاصيل التحدي
 import EditChallenge from './pages/EditChallenge'; // استيراد صفحة تعديل التحدي
+import { Toaster } from 'react-hot-toast';
 // لاحقًا نضيف Register و Challenges`
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <Router>
+      <Toaster position="top-center" />
       <Routes>
         <Route path="/challenges/:id/edit" element={<EditChallenge />} />
         <Route path="/add" element={<AddChallenge />} />
