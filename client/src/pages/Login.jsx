@@ -38,6 +38,10 @@ function Login() {
         borderRadius: '8px',
       }}
     >
+      <h2 className="text-3xl text-center text-blue-600 font-bold mb-4">
+        تسجيل الدخول
+      </h2>
+
       <h2>تسجيل الدخول</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
