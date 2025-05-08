@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 function AddChallenge() {
   const { token, user } = useAuth();
@@ -11,7 +12,7 @@ function AddChallenge() {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!token) navigate('/login');
@@ -19,6 +20,7 @@ function AddChallenge() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await api.post(
         '/challenges',
@@ -35,71 +37,71 @@ function AddChallenge() {
           },
         }
       );
+
+      toast.success('✅ تم إضافة التحدي بنجاح!');
       navigate('/challenges');
     } catch (err) {
-      setError(err.response?.data?.error || 'حدث خطأ أثناء الإضافة');
+      toast.error(err.response?.data?.error || 'حدث خطأ أثناء الإضافة');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-2xl shadow-md border">
-      <h2 className="text-2xl font-bold text-blue-600 mb-6 text-center">
+    <div className="max-w-2xl mx-auto mt-10 bg-white/5 p-8 rounded-xl shadow-lg text-white">
+      <h2 className="text-3xl font-bold mb-6 text-purple-300">
         📝 إضافة تحدٍ جديد
       </h2>
-
-      {error && (
-        <p className="text-red-600 mb-4 text-center font-medium">{error}</p>
-      )}
-
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block mb-1 font-semibold">عنوان التحدي</label>
+          <label className="block mb-1">📌 العنوان</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-white/10 p-2 rounded text-white placeholder:text-gray-400"
+            placeholder="مثال: تحدي القراءة"
           />
         </div>
-
         <div>
-          <label className="block mb-1 font-semibold">الوصف</label>
+          <label className="block mb-1">🧠 الوصف</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-white/10 p-2 rounded text-white placeholder:text-gray-400"
+            placeholder="اشرح التحدي بإيجاز..."
           ></textarea>
         </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">تاريخ البداية</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block mb-1">📅 البداية</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+              className="w-full bg-white/10 p-2 rounded text-white"
+            />
+          </div>
+          <div>
+            <label className="block mb-1">📅 النهاية</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              required
+              className="w-full bg-white/10 p-2 rounded text-white"
+            />
+          </div>
         </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">تاريخ النهاية</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full mt-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 rounded font-bold hover:scale-[1.02] transition"
         >
-          ➕ إضافة التحدي
+          {loading ? '🚀 جاري الإضافة...' : '➕ أضف التحدي'}
         </button>
       </form>
     </div>

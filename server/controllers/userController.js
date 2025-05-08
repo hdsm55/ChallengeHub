@@ -19,6 +19,9 @@ const createUser = async (req, res) => {
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    if (err.code === '23505') {
+      return res.status(400).json({ error: '📧 هذا البريد الإلكتروني مسجّل مسبقًا.' });
+    }
     console.error('❌ Error creating user:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
