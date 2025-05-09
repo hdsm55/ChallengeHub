@@ -20,6 +20,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="/" element={<Navigate to="/challenges" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/challenges" element={<Challenges />} />
