@@ -1,12 +1,11 @@
-const { Pool } = require('pg');          // استيراد مكتبة PostgreSQL
-require('dotenv').config();              // تحميل متغيرات البيئة من .env
+const { Pool } = require('pg');
+require('dotenv').config();
 
 const pool = new Pool({
-  user: process.env.DB_USER,             // اسم المستخدم
-  host: 'localhost',                     // السيرفر المحلي
-  database: process.env.DB_NAME,         // اسم قاعدة البيانات
-  password: process.env.DB_PASS,         // كلمة المرور
-  port: 5432                             // المنفذ الافتراضي
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // مطلوب لتجاوز مشكلة SSL في Render
+  },
 });
 
-module.exports = pool;                   // تصدير الاتصال لبقية الملفات
+module.exports = pool;

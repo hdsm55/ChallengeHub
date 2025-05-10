@@ -2,7 +2,7 @@ import axios from "axios";
 
 // أنشئ نسخة مخصصة من Axios
 const api = axios.create({
-    baseURL: "http://localhost:5000", // غيّرها لاحقًا لو رفعت السيرفر
+    baseURL: import.meta.env.VITE_API_URL, // غيّرها لاحقًا لو رفعت السيرفر
     headers: {
         "Content-Type": "application/json",
     },
