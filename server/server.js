@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
  origin: [
   "http://localhost:5173",
-  process.env.FRONTEND_URL
+  "https://challengehub-lyart.vercel.app"
 ],
   credentials: true
 }));
