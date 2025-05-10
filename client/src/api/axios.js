@@ -1,14 +1,14 @@
 import axios from "axios";
 
-// أنشئ نسخة مخصصة من Axios
+// Create a custom instance of Axios
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL, // غيّرها لاحقًا لو رفعت السيرفر
+    baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000", // Change it later if the server is deployed
     headers: {
         "Content-Type": "application/json",
     },
     });
 
-    // إضافة التوكن تلقائيًا إن وجد (للمستقبل)
+    // Automatically add the token if it exists (for future use)
     api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     if (token) {

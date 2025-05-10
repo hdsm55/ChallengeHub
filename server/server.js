@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middlewares
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173", // لتسمح بالفرونت من Vercel
+  origin:"http://localhost:5173" ||  process.env.FRONTEND_URL , // لتسمح بالفرونت من Vercel
   credentials: true
 }));
 

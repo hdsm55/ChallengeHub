@@ -16,6 +16,8 @@ import EditChallenge from './pages/EditChallenge';
 
 function App() {
   const { user } = useAuth();
+  console.log(user);
+
   return (
     <Router>
       <Routes>
