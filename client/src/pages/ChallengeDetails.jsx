@@ -1,85 +1,88 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import api from '../api/axios';
+import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 function ChallengeDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user, token } = useAuth();
-
   const [challenge, setChallenge] = useState(null);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchChallenge = async () => {
       try {
-        const response = await api.get(`/challenges/${id}`);
-        setChallenge(response.data);
+        const res = await api.get(`/challenges/${id}`);
+        setChallenge(res.data);
       } catch (err) {
-        console.error('❌ فشل جلب التحدي:', err);
-        setError('لم يتم العثور على التحدي');
+        toast.error('فشل في تحميل التحدي');
+        navigate('/challenges');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchChallenge();
-  }, [id]);
-
-  if (error) return <p className="text-red-500 text-center mt-10">{error}</p>;
-  if (!challenge)
-    return <p className="text-white text-center mt-10">جاري التحميل...</p>;
-
-  const isOwner = user && user.id === challenge.creator_id;
+  }, [id, navigate]);
 
   const handleDelete = async () => {
-    if (!token) return;
-
-    const confirmDelete = window.confirm('هل أنت متأكد من حذف التحدي؟');
+    const confirmDelete = confirm('هل أنت متأكد من حذف هذا التحدي؟');
     if (!confirmDelete) return;
 
     try {
-      await api.delete(`/challenges/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert('✅ تم حذف التحدي بنجاح');
+      await api.delete(`/challenges/${id}`);
+      toast.success('✅ تم حذف التحدي بنجاح');
       navigate('/challenges');
     } catch (err) {
-      console.error('❌ فشل حذف التحدي:', err);
-      alert('حدث خطأ أثناء حذف التحدي');
+      console.error('❌ فشل الحذف:', err);
+      toast.error('حدث خطأ أثناء الحذف');
     }
   };
 
-  return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white/5 text-white rounded-xl shadow-lg">
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-4 bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded text-white font-medium transition"
-      >
-        ⬅ الرجوع للتحديات
-      </button>
+  if (loading)
+    return <p className="text-center mt-10 text-white">⏳ جارٍ التحميل...</p>;
 
-      <h2 className="text-3xl font-bold mb-4 text-cyan-300">
+  if (!challenge) return null;
+
+  return (
+    <div className="max-w-3xl mx-auto mt-10 bg-white/5 p-6 rounded-lg shadow-lg text-white">
+      <Link
+        to="/challenges"
+        className="text-sm text-purple-300 hover:underline block mb-4"
+      >
+        ← الرجوع للتحديات
+      </Link>
+
+      <h2 className="text-3xl font-bold text-cyan-300 mb-2">
         {challenge.title}
       </h2>
-      <p className="text-gray-200 mb-4">{challenge.description}</p>
-      <p className="text-sm text-gray-400">
-        📅 {new Date(challenge.start_date).toLocaleDateString()} →{' '}
-        {new Date(challenge.end_date).toLocaleDateString()}
-      </p>
 
-      {isOwner && (
-        <div className="mt-6 flex gap-4">
-          <button
-            onClick={() => navigate(`/challenges/${id}/edit`)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded text-white"
+      <p className="text-gray-300 mb-4">{challenge.description}</p>
+
+      <div className="text-sm text-gray-400 mb-6">
+        من{' '}
+        <span className="text-white font-medium">
+          {new Date(challenge.start_date).toLocaleDateString()}
+        </span>{' '}
+        إلى{' '}
+        <span className="text-white font-medium">
+          {new Date(challenge.end_date).toLocaleDateString()}
+        </span>
+      </div>
+
+      {user?.id === challenge.creator_id && (
+        <div className="flex gap-4">
+          <Link
+            to={`/challenges/${challenge.id}/edit`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
           >
             ✏️ تعديل
-          </button>
+          </Link>
           <button
             onClick={handleDelete}
-            className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded text-white"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
           >
             🗑️ حذف
           </button>

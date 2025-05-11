@@ -3,37 +3,42 @@ import api from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // ⬅️ إضافة مهمة
 
 function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth(); // ⬅️ استدعاء دالة تسجيل الدخول
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await api.post('/users', { username, email, password });
-      toast.success('✅ تم التسجيل بنجاح، يمكنك تسجيل الدخول الآن');
-      navigate('/login');
+      const res = await api.post('/users', { username, email, password });
+
+      // تسجيل الدخول تلقائيًا
+      login(res.data.token, res.data.user);
+      toast.success(`👋 مرحبًا ${res.data.user.username}، تم تسجيل الدخول`);
+
+      navigate('/challenges');
     } catch (err) {
       const errorMessage = err.response?.data?.error || 'حدث خطأ أثناء التسجيل';
-      if (errorMessage.includes('مسجّل')) {
-        toast('📬 البريد مسجل مسبقًا، تم تحويلك لتسجيل الدخول');
-        navigate('/login');
-      }
-      // ✅ إذا كان البريد مسجلاً مسبقًا → نوجهه لتسجيل الدخول
+
       if (
+        err.response?.status === 409 ||
         errorMessage.toLowerCase().includes('already') ||
-        errorMessage.includes('exists')
+        errorMessage.toLowerCase().includes('exists')
       ) {
         toast('📬 البريد مسجل مسبقًا، تم تحويلك لتسجيل الدخول');
         navigate('/login');
       } else {
         toast.error(errorMessage);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,6 +95,7 @@ function Register() {
         >
           {loading ? '📩 جارٍ التسجيل...' : '✅ سجل الآن'}
         </button>
+
         <p className="text-sm mt-4 text-gray-400 text-center">
           لديك حساب؟{' '}
           <Link to="/login" className="text-blue-400 hover:underline">
