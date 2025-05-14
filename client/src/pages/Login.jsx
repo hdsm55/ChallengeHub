@@ -24,7 +24,7 @@ function Login() {
         errorMessage.toLowerCase().includes('invalid') ||
         errorMessage.includes('كلمة المرور')
       ) {
-        toast.error('❌ البريد أو كلمة المرور غير صحيحة');
+        toast.error(' البريد أو كلمة المرور غير صحيحة');
       } else {
         toast.error(errorMessage);
       }
@@ -40,7 +40,6 @@ function Login() {
         <h2 className="text-center text-2xl font-bold mb-6 text-purple-300">
           تسجيل الدخول إلى ChallengeHub
         </h2>
-
         <label className="block mb-2">📧 البريد الإلكتروني</label>
         <input
           type="email"
@@ -50,8 +49,7 @@ function Login() {
           className="w-full mb-4 p-2 rounded bg-white/20 text-white placeholder:text-white/60"
           placeholder="you@example.com"
         />
-
-        <label className="block mb-2">🔒 كلمة المرور</label>
+        <label className="block mb-2"> كلمة المرور</label>
         <input
           type="password"
           value={password}
@@ -65,7 +63,7 @@ function Login() {
           type="submit"
           className="w-full bg-gradient-to-r from-purple-500 to-blue-500 py-2 rounded text-white font-bold mt-2 hover:scale-[1.02] transition"
         >
-          🚀 دخول إلى المنصة
+          دخول إلى المنصة
         </button>
 
         <p className="text-sm mt-4 text-gray-400 text-center">
